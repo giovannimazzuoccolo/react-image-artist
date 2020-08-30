@@ -5,7 +5,6 @@ import {
   initialDrawingState,
   drawStatus,
   Tool,
-  pos,
 } from './ImageCanvas.types';
 import Imagesvg from './ImageSVG';
 import Pens from '../Pens/Pens';
@@ -129,7 +128,17 @@ const Imagecanvas: React.SFC<ImagecanvasProps> = ({
 
     const pos = { x: _e.clientX, y: _e.clientY };
     if (drawState === drawStatus.DOWN) {
-      dispatch({ type: 'ADD_PEN', path: { ...pos, color } });
+      switch (tool) {
+        case Tool.PEN:
+          return dispatch({ type: 'ADD_PEN', path: { ...pos, color } });
+        case Tool.MARKER:
+          return dispatch({ type: 'ADD_MARKER', path: { ...pos, color } });
+        case Tool.HIGHLIGHTER:
+          return dispatch({ type: 'ADD_HIGHLIGHTER', path: { ...pos, color } });
+      }
+    }
+    if (drawState === drawStatus.UP) {
+      dispatch({ type: 'ACTION_UP' });
     }
   }
 
@@ -138,6 +147,10 @@ const Imagecanvas: React.SFC<ImagecanvasProps> = ({
 
     //const pos = { x: _e.clientX, y: _e.clientY };
     dispatch({ type: 'ACTION_UP' });
+  }
+
+  function clearCanvas() {
+    dispatch({ type: 'CLEAR' });
   }
 
   return (
@@ -166,6 +179,7 @@ const Imagecanvas: React.SFC<ImagecanvasProps> = ({
         highlighter={highlighter}
         marker={marker}
         clear={clear}
+        clearFunc={clearCanvas}
         changeTool={changeTool}
         selectedTool={tool}
       />

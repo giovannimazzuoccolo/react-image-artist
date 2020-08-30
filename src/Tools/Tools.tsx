@@ -27,6 +27,7 @@ interface IToolsProps {
   marker?: boolean;
   highlighter?: boolean;
   clear?: boolean;
+  clearFunc: Function;
   selectedTool: Tool;
   changeTool: Function;
 }
@@ -37,6 +38,7 @@ const Tools: React.SFC<IToolsProps> = ({
   highlighter,
   clear,
   selectedTool,
+  clearFunc,
   changeTool,
 }) => {
   function isSelected(tool: Tool): string {
@@ -76,7 +78,7 @@ const Tools: React.SFC<IToolsProps> = ({
       {clear && (
         <button
           className={`button ${isSelected(Tool.HIGHLIGHTER)}`}
-          onClick={() => changeTool(Tool.HIGHLIGHTER)}
+          onClick={() => clearFunc()}
         >
           Clear
         </button>
